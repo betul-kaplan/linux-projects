@@ -1,0 +1,23 @@
+#! /bin/bash
+awk -F, '{print $1,$4,$10}' event_history.csv >filter.csv
+sleep 5
+awk '{ if ($1 == "serdar") print $0;}' filter.csv  >serdar.csv
+sleep 5
+awk '/Terminate/ {print}' serdar.csv >serdar_terminated.csv
+sleep 5
+awk '{print $3}' serdar_terminated.csv > id.txt
+sleep 5
+cat id.txt | tr ' ",},] '  " " > results.txt
+sleep 5
+sed 's/resourceName/Terminated_Ids_By_Serdar/' results.txt >result.txt
+
+cat result.txt
+
+
+cat event_history.csv | awk -F, '{print $1,$4,$10}'| awk '{ if ($1 == "serdar") print $0;}'| awk '/Terminate/ {print}' | awk '{print $3}' | cat id.txt | tr ' ",},] '  " " | sed 's/resourceName/Terminated_Ids_By_Serdar/'
+
+
+1. cat event_history.csv | grep "serdar" | grep -i "Terminate" | grep -Eo  "i-.{17}" | sort | uniq > result.txt
+2. cat event_history.csv | grep "serdar" | grep -i "Terminate" | grep -Eo  "i-[a-zA-Z0-9]{17}" | sort | uniq > result.txt
+3. cat event_history.csv | grep "serdar" | grep -i "Terminate" | grep -o  "i-.\{17\}"| sort | uniq > result.txt
+4. cat event_history.csv | grep "serdar" | grep -i "Terminate" | grep -Eo  "i-.{17}" | sort | uniq > result.txt
